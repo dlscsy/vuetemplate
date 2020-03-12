@@ -63,6 +63,12 @@ export const constantRoutes = [
     meta: { title: 'Demo', icon: 'example' },
     children: [
       {
+        path: 'case7',
+        name: 'case7',
+        component: () => import('@/views/case7/echartsdemo'),
+        meta: { title: 'case7-图表', icon: 'table' }
+      },
+      {
         path: 'demo1',
         name: 'Demo1',
         component: () => import('@/views/demo/demo1/demo1'),

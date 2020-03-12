@@ -8,7 +8,7 @@ import request from '@/utils/request'
 export default class TradeAnnexIssuedMainPageApi {
   static queryMeal(queryParam) {
     return request({
-      url: '/testdemo/gencodeController/getBaseInfo',
+      url: '/px-demo/gencodeController/getBaseInfo',
       method: 'post',
       data: queryParam
     })
@@ -16,7 +16,7 @@ export default class TradeAnnexIssuedMainPageApi {
 
   static queryPage(queryParam) {
     return request({
-      url: '/testdemo/basetmealInfoController/getAllInfo',
+      url: '/px-demo/basetmealInfoController/getAllInfo',
       method: 'post',
       data: queryParam
     })
@@ -24,21 +24,21 @@ export default class TradeAnnexIssuedMainPageApi {
 
   static deleteGroup(ids) {
     return request({
-      url: '/testdemo/basetmealInfoController/deleteInfo',
+      url: '/px-demo/basetmealInfoController/deleteInfo',
       method: 'post',
       data: ids
     })
   }
   static addGroup(baMealItem) {
     return request({
-      url: '/testdemo/basetmealInfoController/addInfo',
+      url: '/px-demo/basetmealInfoController/addInfo',
       method: 'post',
       data: baMealItem
     })
   }
   static updateGroup(baMealItem) {
     return request({
-      url: '/testdemo/basetmealInfoController/updateInfo',
+      url: '/px-demo/basetmealInfoController/updateInfo',
       method: 'post',
       data: baMealItem
     })

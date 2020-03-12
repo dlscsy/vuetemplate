@@ -8,7 +8,7 @@ import request from '@/utils/request'
 export default class TradeAnnexIssuedMainPageApi {
   static queryMeal(queryParam) {
     return request({
-      url: '/testdemo/gencodeController/getBaseInfo',
+      url: '/px-demo/gencodeController/getBaseInfo',
       method: 'post',
       data: queryParam
     })
@@ -16,7 +16,7 @@ export default class TradeAnnexIssuedMainPageApi {
 
   static queryPage(queryParam) {
     return request({
-      url: '/testdemo/basetmealInfoController/getAllInfo',
+      url: '/px-demo/basetmealInfoController/getAllInfo',
       method: 'post',
       data: queryParam
     })

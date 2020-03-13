@@ -7,7 +7,16 @@
           <el-table-column v-for="(v,i) in tableData.columns" :prop="v.field" :label="v.title" :width="v.width">
             <template slot-scope="scope">
               <span v-if="scope.row.isSet">
-                <el-input v-model="tableData.sel[v.field]" size="mini" placeholder="请输入内容" />
+                <el-date-picker
+                  v-if="v.type==='date'"
+                  v-model="tableData.sel[v.field]"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  size="mini"
+                  style="width: 130px"
+                  placeholder="选择日期"
+                />
+                <el-input v-else v-model="tableData.sel[v.field]" size="mini" placeholder="请输入内容" />
               </span>
               <span v-else>{{ scope.row[v.field] }}</span>
             </template>
@@ -70,12 +79,12 @@ export default {
   methods: {
     // 加载表格数据
     loadData() {
-      // 根据实际情况，自己改下啊
+      // 给数据添加是否编辑标识
       this.tableData.data.map(i => {
-        if (i.id === null) {
-          i.id = uuidv1()
-        }
-        i.isSet = false// 给后台返回数据添加`isSet`标识
+        // if (i.id === null) {
+        //   i.id = uuidv1()
+        // }
+        i.isSet = false // 给后台返回数据添加`isSet`标识
         return i
       })
     },
@@ -85,7 +94,7 @@ export default {
         if (i.isSet) return this.$message.warning('请先保存当前编辑项')
       }
       // 构造空行数据结构
-      const j = { id: uuidv1(), 'isSet': true }
+      const j = { id: null, 'isSet': true }
       for (var i in this.tableData.columns) {
         j[this.tableData.columns[i].field] = ''
       }
@@ -118,14 +127,23 @@ export default {
       })
       row.isSet = false
       this.tableData.data.splice(index, 1, row)
+      if (row.id === null) {
+        this.$emit('add', row)
+      } else {
+        this.$emit('edit', row)
+      }
     },
     // 取消修改
     clearData(row, index) {
       this.tableData.sel = JSON.parse(JSON.stringify(row))
       row.isSet = false
       this.tableData.data.splice(index, 1, row)
+      if (row.id === null) {
+        this.tableData.data.splice(index, 1)
+      }
     },
     delData(row, index) {
+      this.$emit('del', row.id)
       this.tableData.data.splice(index, 1)
     }
   }

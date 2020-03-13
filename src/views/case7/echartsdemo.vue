@@ -8,7 +8,14 @@
         <component :is="currentView" :datas="barData" style="height: 400px" />   <!--挂载子组件,chartdata为传入的数据-->
       </el-col>
       <el-col :span="12">
-        <EditTable :itable-data="baseData" :icolumns="columnData" :tableLoading="listLoading"/>
+        <EditTable
+          :itable-data="baseData"
+          :icolumns="columnData"
+          :table-loading="listLoading"
+          @add="addData($event)"
+          @edit="editData($event)"
+          @del="delData($event)"
+        />
       </el-col>
     </el-row>
   </div>
@@ -18,9 +25,9 @@
 import BarChart from '@/components/Echarts/BarChart'
 import BasicLineChart from '@/components/Echarts/BasicLineChart'
 import EditTable from '@/components/EditTable/EditTable'
-
+import moment from 'moment'
 // 访问数据接口
-import { getList } from '@/api/case7/case7'
+import { getList, add, edit, del } from '@/api/case7/case7'
 export default {
   name: 'Echartsdemo',
   components: { BarChart, BasicLineChart, EditTable },
@@ -28,36 +35,7 @@ export default {
     return {
       currentView: 'BasicLineChart',
       listLoading: true,
-      baseData: [
-        // { id: 0,
-        //   lab: '周一',
-        //   high: 15,
-        //   low: 6 },
-        // { id: 1,
-        //   lab: '周二',
-        //   high: 14,
-        //   low: 5 },
-        // { id: 2,
-        //   lab: '周三',
-        //   high: 13,
-        //   low: 2 },
-        // { id: 3,
-        //   lab: '周四',
-        //   high: 17,
-        //   low: 8 },
-        // { id: 4,
-        //   lab: '周五',
-        //   high: 20,
-        //   low: 9 },
-        // { id: 5,
-        //   lab: '周六',
-        //   high: 19,
-        //   low: 7 },
-        // { id: 6,
-        //   lab: '周日',
-        //   high: 18,
-        //   low: 2 }
-      ],
+      baseData: [],
       barData: {
         title: null,
         divid: 'mybarcharts',
@@ -69,9 +47,9 @@ export default {
       },
       columnData:
         [
-          { field: 'lab', title: '日期', width: 120 },
-          { field: 'high', title: '最高温度' },
-          { field: 'low', title: '最低温度' }
+          { field: 'lab', title: '日期', type: 'date', width: 150 },
+          { field: 'high', title: '最高温度', type: 'number' },
+          { field: 'low', title: '最低温度', type: 'number' }
         ]
     }
   },
@@ -101,11 +79,36 @@ export default {
     fetchData() {
       this.listLoading = true
       getList().then(response => {
-        this.baseData = response.data.items
+        // 因为data是数组数据,所以更新要用$set更新数据,这样子控件才能触发数据变化的监控
+        for (var i in response.data) {
+          response.data[i].lab = this.dateFormat(response.data[i].lab)
+          this.$set(this.baseData, i, response.data[i])
+        }
         this.listLoading = false
         // 更新图标数据
         this.createLineData()
       })
+    },
+    addData(row) {
+      add(row).then(
+        response => {
+          this.fetchData()
+        }
+      )
+    },
+    editData(row) {
+      edit(row).then(
+        response => {
+          this.fetchData()
+        }
+      )
+    },
+    delData(id) {
+      del(id).then(
+        response => {
+          this.fetchData()
+        }
+      )
     },
     createLineData() {
       this.barData.datalab = []
@@ -119,6 +122,9 @@ export default {
         cd = cd + 1
       }
       this.barData.title = '最近' + cd + '气温统计'
+    },
+    dateFormat(fdate) {
+      return moment(fdate).format('YYYY-MM-DD')
     }
   }
 }

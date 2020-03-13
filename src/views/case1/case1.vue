@@ -116,7 +116,7 @@ let that // 变量在filters使用
 import api from '../../api/case1/case1'
 import * as fecha from 'element-ui/lib/utils/date' // 日期转换引入fecha
 // import下拉树组件
-import TreeSelect from './components/tree-select.vue'
+import TreeSelect from '../../components/case1/tree-select.vue'
 const reg = /[^\a-\z\A-\Z0-9_，,。、\u4E00-\u9FA5]/g // 正则
 // 存储下拉树 选中数据
 var selectTreeCheckIds

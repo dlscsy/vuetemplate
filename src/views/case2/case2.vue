@@ -188,7 +188,7 @@ import api from '../../api/case2/case2'
 // 日期转换引入fecha
 import * as fecha from 'element-ui/lib/utils/date'
 // import下拉树组件
-import TreeSelect from '../case1/components/tree-select.vue'
+import TreeSelect from '../../components/case1/tree-select.vue'
 const reg = /[^\a-\z\A-\Z0-9_，,。、\u4E00-\u9FA5]/g
 // 定义下拉树数据
 var menus = [
